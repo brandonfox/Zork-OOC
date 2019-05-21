@@ -8,20 +8,20 @@ import java.util.*;
  */
 public class GameLauncher {
 
-    private static final Map<String,Command> menuCommands = new HashMap<>();
-    private static final List<String> commandOrder = new ArrayList<>();
-    private boolean running;
+    private CommandGroup menuCommands;
+    public static boolean GAME_RUNNING;
 
     private static final Scanner INPUT_SCANNER = new Scanner(System.in);
 
     public void initialise(){
-        running = true;
+        GAME_RUNNING = true;
         initialiseMenuCommands();
         displayMenu();
-        while(running){
+        while(GAME_RUNNING){
             String command = waitForInput();
-            try{
-                menuCommands.get(CommandParser.parseMenuCommand(command,commandOrder)).doCommand();
+            try {
+                CommandPair cmdPair = CommandParser.parseCommand(command, menuCommands);
+                menuCommands.getCommand(cmdPair.getCommand()).doCommand(cmdPair.getParam());
             }
             catch(IOException e){
                 System.out.println("Command not recognised. Please try again");
@@ -31,6 +31,8 @@ public class GameLauncher {
 
     private void startNewGame(){
         System.out.println("Starting new game");
+        Game game = new Game();
+        game.startNewGame();
         //TODO implement starting new game stuff
     }
     private void continueGame(){
@@ -43,31 +45,22 @@ public class GameLauncher {
      * Commands are automatically numbered in the order they are given
      */
     private void initialiseMenuCommands(){
-        addCommand("new game",this::startNewGame);
+        menuCommands = new CommandGroup();
+        menuCommands.addCommand("new game",(param) -> startNewGame());
         //TODO uncomment this if got enough time to implement saving
-//        addCommand("continue",this::continueGame);
-        addCommand("exit",this::exit);
-    }
-    private void addCommand(String command,Command method){
-        menuCommands.put(command,method);
-        commandOrder.add(command);
+//        menuCommands.addCommand("continue",(param) -> continueGame());
+        menuCommands.addCommand("exit",(param) -> exit());
     }
 
     private void displayMenu(){
         System.out.println("Welcome to Zork!");
-        for(int i = 0; i < commandOrder.size(); i++){
-            String command = commandOrder.get(i);
-            System.out.println(i+1 + ". " + command.substring(0,1).toUpperCase() + command.substring(1));
-        }
+        menuCommands.printCommands();
     }
     private String waitForInput(){
         return INPUT_SCANNER.nextLine();
     }
-    private void exit(){
+    public static void exit(){
         System.out.println("Exiting game");
-        running = false;
-    }
-    public static Set<String> getValidCommands(){
-        return menuCommands.keySet();
+        GAME_RUNNING = false;
     }
 }

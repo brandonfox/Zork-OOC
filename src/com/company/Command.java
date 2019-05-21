@@ -1,5 +1,5 @@
 package com.company;
 
 public interface Command {
-    void doCommand();
+    void doCommand(String extraParam);
 }

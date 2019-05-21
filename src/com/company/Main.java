@@ -7,5 +7,4 @@ public class Main {
         GameLauncher launcher = new GameLauncher();
         launcher.initialise();
     }
-
 }
