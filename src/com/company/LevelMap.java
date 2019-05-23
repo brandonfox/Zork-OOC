@@ -21,12 +21,21 @@ public class LevelMap {
     }
     private void printRoomNeighbours(Room room){
         //Print north
-        if(roomMap.get(new Point(room.getRoomPosition().x,room.getRoomPosition().y+1))!= null) System.out.println("There is a room to the north");
+        if(getRoomAt(new Point(room.getRoomPosition().x,room.getRoomPosition().y+1))!= null) System.out.println("There is a room to the north");
         //Print east
-        if(roomMap.get(new Point(room.getRoomPosition().x+1,room.getRoomPosition().y))!= null) System.out.println("There is a room to the east");
+        if(getRoomAt(new Point(room.getRoomPosition().x+1,room.getRoomPosition().y))!= null) System.out.println("There is a room to the east");
         //Print south
-        if(roomMap.get(new Point(room.getRoomPosition().x,room.getRoomPosition().y-1))!= null) System.out.println("There is a room to the south");
+        if(getRoomAt(new Point(room.getRoomPosition().x,room.getRoomPosition().y-1))!= null) System.out.println("There is a room to the south");
         //Print west
-        if(roomMap.get(new Point(room.getRoomPosition().x-1,room.getRoomPosition().y))!= null) System.out.println("There is a room to the west");
+        if(getRoomAt(new Point(room.getRoomPosition().x-1,room.getRoomPosition().y))!= null) System.out.println("There is a room to the west");
+    }
+    public Room getRoomAt(Point position){
+        return roomMap.get(position);
+    }
+    public Room getCurrentRoom(){
+        return currentRoom;
+    }
+    public void setCurrentRoom(Room room){
+        currentRoom = room;
     }
 }

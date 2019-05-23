@@ -1,5 +1,9 @@
 package com.company;
 
+import Commands.CommandGroup;
+import Commands.CommandPair;
+import Commands.CommandParser;
+
 import java.io.IOException;
 import java.util.*;
 

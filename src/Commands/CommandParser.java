@@ -1,6 +1,4 @@
-package com.company;
-
-import javafx.util.Pair;
+package Commands;
 
 import java.io.IOException;
 import java.util.Set;
@@ -8,7 +6,6 @@ import java.util.Set;
 public abstract class CommandParser {
 
     public static CommandPair parseCommand(String command, CommandGroup commandGroup) throws IOException {
-        //TODO add support for command parameters
         Set<String> validCommands = commandGroup.getCommands();
         String normalisedCommand = command.toLowerCase();
         //Check integer implementation

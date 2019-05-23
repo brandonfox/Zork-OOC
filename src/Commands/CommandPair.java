@@ -1,4 +1,4 @@
-package com.company;
+package Commands;
 
 public class CommandPair {
 

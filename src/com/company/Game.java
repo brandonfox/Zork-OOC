@@ -1,5 +1,10 @@
 package com.company;
 
+import Commands.CommandGroup;
+import Commands.CommandPair;
+import Commands.CommandParser;
+
+import java.awt.*;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -25,7 +30,7 @@ public class Game {
         playerData = new PlayerData();
     }
     private void runGame(){
-        //TODO place introductory messages
+        //Print an introductory message before starting the game
         System.out.println("Welcome to zork where you'll die over and over and over again.");
         System.out.println("Have fun");
         while(GameLauncher.GAME_RUNNING){
@@ -48,7 +53,7 @@ public class Game {
     }
     private void initialiseCommands(){
         gameCommands = new CommandGroup();
-        gameCommands.addCommand("info",(param) -> displayInfo());
+        gameCommands.addCommand("info",this::displayInfo);
         gameCommands.addCommand("move",this::moveRoom);
         gameCommands.addCommand("take",this::take);
         gameCommands.addCommand("drop",this::dropItem);
@@ -56,10 +61,40 @@ public class Game {
         gameCommands.addCommand("help",(param) -> help());
         gameCommands.addCommand("quit",(param) -> quit());
     }
-    private void displayInfo(){
+    private void displayInfo(String category){
         //TODO implement info display
     }
     private void moveRoom(String direction){
+        Point movePoint = getPointInDirection(direction);
+        if(movePoint == null){
+            System.out.println("Direction: " + direction + " not recognised");
+            return;
+        }
+        Room room = currentLevelMap.getRoomAt(movePoint);
+        if(room == null){
+            System.out.println("There is no room there");
+            return;
+        }
+        currentLevelMap.setCurrentRoom(room);
+    }
+
+    /**
+     * Get a point in the direction 'direction'
+     * @param direction The string to read
+     * @return A point in the direction 'direction' or null if direction could not be read
+     */
+    private Point getPointInDirection(String direction){
+        Point currentPoint = currentLevelMap.getCurrentRoom().getRoomPosition();
+        if(direction.contains("north"))
+            return new Point(currentPoint.x,currentPoint.y + 1);
+        else if(direction.contains("east"))
+            return new Point(currentPoint.x + 1, currentPoint.y);
+        else if(direction.contains("south"))
+            return new Point(currentPoint.x,currentPoint.y - 1);
+        else if(direction.contains("west"))
+            return new Point(currentPoint.x-1,currentPoint.y);
+        else
+            return null;
 
     }
     private void take(String object){
