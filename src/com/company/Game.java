@@ -3,9 +3,11 @@ package com.company;
 import Commands.CommandGroup;
 import Commands.CommandPair;
 import Commands.CommandParser;
+import Items.Item;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Scanner;
 
 public class Game {
@@ -98,7 +100,15 @@ public class Game {
 
     }
     private void take(String object){
-        //TODO implement take stuff
+        if(currentLevelMap.getCurrentRoom().hasItem()){
+            Collection<Item> itemsInRoom = currentLevelMap.getCurrentRoom().getItems();
+            Item itemToTake = CommandParser.parseItemCommand(object,itemsInRoom);
+            if(itemToTake != null){
+                currentLevelMap.getCurrentRoom().pickUpItem(playerData,itemToTake);
+                return;
+            }
+        }
+        System.out.println("No item with name " + object + " found.");
     }
     private void dropItem(String item){
         //TODO implement dropping stuff

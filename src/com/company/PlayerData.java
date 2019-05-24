@@ -1,11 +1,18 @@
 package com.company;
 
+import Items.Item;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayerData {
-    //TODO implement player
     private int health;
     private int maxHealth;
 
+    private List<Item> inventory;
+
     public PlayerData(){
+        inventory = new ArrayList<>();
         maxHealth = 100;
         health = maxHealth;
     }
@@ -15,5 +22,10 @@ public class PlayerData {
         if(health > maxHealth)
             health = maxHealth;
     }
+
+    public void placeInInventory(Item item){
+        inventory.add(item);
+    }
+
 
 }

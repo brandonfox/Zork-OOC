@@ -14,7 +14,7 @@ public class LevelMap {
     }
 
     public void displayCurrentRoomData(){
-        //TODO implement this
+        //TODO maybe add extra room data
         System.out.println("You are in a room");
         System.out.println("There is nothing here");
         printRoomNeighbours(currentRoom);

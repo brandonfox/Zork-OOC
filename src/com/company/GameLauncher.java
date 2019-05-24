@@ -37,7 +37,6 @@ public class GameLauncher {
         System.out.println("Starting new game");
         Game game = new Game();
         game.startNewGame();
-        //TODO implement starting new game stuff
     }
     private void continueGame(){
         //TODO implement continue game function

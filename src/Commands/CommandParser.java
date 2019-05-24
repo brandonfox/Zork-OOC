@@ -1,6 +1,9 @@
 package Commands;
 
+import Items.Item;
+
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Set;
 
 public abstract class CommandParser {
@@ -32,6 +35,15 @@ public abstract class CommandParser {
         if(paramIndex >= string.length()-1){
             return "";
         }
-        return string.substring(paramIndex);
+        return string.substring(paramIndex).trim();
+    }
+    public static Item parseItemCommand(String string, Collection<Item> items){
+        for(Item i: items){
+            for(String names: i.getAcceptedNames()){
+                if(names.contains(string))
+                    return i;
+            }
+        }
+        return null;
     }
 }
