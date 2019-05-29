@@ -1,15 +1,16 @@
 package com.company;
 
 import Items.Item;
+import Items.ItemContainer;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
-public class PlayerData {
+public class PlayerData implements ItemContainer {
     private int health;
     private int maxHealth;
 
-    private List<Item> inventory;
+    private Collection<Item> inventory;
 
     public PlayerData(){
         inventory = new ArrayList<>();
@@ -23,9 +24,8 @@ public class PlayerData {
             health = maxHealth;
     }
 
-    public void placeInInventory(Item item){
-        inventory.add(item);
+    @Override
+    public Collection<Item> getInventory() {
+        return inventory;
     }
-
-
 }

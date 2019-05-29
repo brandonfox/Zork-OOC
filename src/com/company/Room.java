@@ -1,13 +1,14 @@
 package com.company;
 
 import Items.Item;
+import Items.ItemContainer;
 import Items.ItemNotFoundException;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Room {
+public class Room implements ItemContainer {
 
     private Point roomPosition;
     private final Collection<Item> roomItems = new ArrayList<>();
@@ -22,20 +23,7 @@ public class Room {
     public boolean hasItem(){
         return roomItems.size() > 0;
     }
-    public Collection<Item> getItems(){
+    public Collection<Item> getInventory(){
         return roomItems;
-    }
-    public void pickUpItem(PlayerData player, Item item){
-        try{
-            removeItem(item);
-            player.placeInInventory(item);
-        }catch(ItemNotFoundException ex){
-            ex.printStackTrace();
-        }
-    }
-    private void removeItem(Item item) throws ItemNotFoundException{
-        if(!roomItems.contains(item))
-            throw new ItemNotFoundException(this,item);
-        roomItems.remove(item);
     }
 }
