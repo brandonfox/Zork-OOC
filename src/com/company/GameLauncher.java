@@ -1,8 +1,8 @@
 package com.company;
 
-import Commands.CommandGroup;
-import Commands.CommandPair;
-import Commands.CommandParser;
+import com.company.Commands.CommandGroup;
+import com.company.Commands.CommandPair;
+import com.company.Commands.CommandParser;
 
 import java.io.IOException;
 import java.util.*;
@@ -15,21 +15,12 @@ public class GameLauncher {
     private CommandGroup menuCommands;
     public static boolean GAME_RUNNING;
 
-    private static final Scanner INPUT_SCANNER = new Scanner(System.in);
-
     public void initialise(){
         GAME_RUNNING = true;
         initialiseMenuCommands();
         displayMenu();
         while(GAME_RUNNING){
-            String command = waitForInput();
-            try {
-                CommandPair cmdPair = CommandParser.parseCommand(command, menuCommands);
-                menuCommands.getCommand(cmdPair.getCommand()).doCommand(cmdPair.getParam());
-            }
-            catch(IOException e){
-                System.out.println("Command not recognised. Please try again");
-            }
+            CommandParser.getAndExecuteCommand(menuCommands);
         }
     }
 
@@ -45,7 +36,7 @@ public class GameLauncher {
     /**
      * Initialise all menu commands.
      * When adding new commands add them in this function
-     * Commands are automatically numbered in the order they are given
+     * com.company.Commands are automatically numbered in the order they are given
      */
     private void initialiseMenuCommands(){
         menuCommands = new CommandGroup();
@@ -58,9 +49,6 @@ public class GameLauncher {
     private void displayMenu(){
         System.out.println("Welcome to Zork!");
         menuCommands.printCommands();
-    }
-    private String waitForInput(){
-        return INPUT_SCANNER.nextLine();
     }
     public static void exit(){
         System.out.println("Exiting game");

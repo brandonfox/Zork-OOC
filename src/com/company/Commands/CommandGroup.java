@@ -1,4 +1,4 @@
-package Commands;
+package com.company.Commands;
 
 import java.util.*;
 
@@ -18,12 +18,20 @@ public class CommandGroup {
         }
     }
     public void printCommandsInline(){
-        System.out.print("| ");
+        StringBuilder commandString = new StringBuilder();
+        commandString.append("| ");
         for(int i = 0; i < commandOrder.size(); i++){
             String command = commandOrder.get(i);
-            System.out.print(i+1 + ". " + command.substring(0,1).toUpperCase() + command.substring(1) + " | ");
+            commandString.append(i+1);
+            commandString.append(". ");
+            commandString.append(command.substring(0,1).toUpperCase());
+            commandString.append(command.substring(1));
+            commandString.append(" | ");
         }
+        String endString = commandString.toString().trim();
+        for(int x = 0; x < endString.length(); x++){System.out.print("_");}
         System.out.print("\n");
+        System.out.println(endString);
     }
     public Command getCommand(String s){
         return menuCommands.get(s);

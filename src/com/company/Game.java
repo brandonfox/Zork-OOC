@@ -1,14 +1,14 @@
 package com.company;
 
-import Commands.CommandGroup;
-import Commands.CommandPair;
-import Commands.CommandParser;
-import Items.Item;
+import com.company.Commands.CommandGroup;
+import com.company.Commands.CommandParser;
+import com.company.Items.Item;
+import com.company.Map.LevelMap;
+import com.company.Map.MapGenerator;
+import com.company.Map.Room;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.Collection;
-import java.util.Scanner;
 
 public class Game {
 
@@ -16,10 +16,7 @@ public class Game {
     private LevelMap currentLevelMap;
     private CommandGroup gameCommands;
 
-    private Scanner scanner;
-
     public void startNewGame(){
-        scanner = new Scanner(System.in);
         createNewLevel();
         initialisePlayer();
         initialiseCommands();
@@ -38,20 +35,11 @@ public class Game {
         while(GameLauncher.GAME_RUNNING){
             displayCurrentRoomData();
             gameCommands.printCommandsInline();
-            String command = waitForInput();
-            try {
-                CommandPair cmdPair = CommandParser.parseCommand(command, gameCommands);
-                gameCommands.getCommand(cmdPair.getCommand()).doCommand(cmdPair.getParam());
-            }catch(IOException e){
-                System.out.println("Command not recognised.");
-            }
+            CommandParser.getAndExecuteCommand(gameCommands);
         }
     }
     private void displayCurrentRoomData(){
         currentLevelMap.displayCurrentRoomData();
-    }
-    private String waitForInput(){
-        return scanner.nextLine();
     }
     private void initialiseCommands(){
         gameCommands = new CommandGroup();
@@ -77,7 +65,14 @@ public class Game {
             System.out.println("There is no room there");
             return;
         }
+        System.out.println("-------------------------------");
+        System.out.println("You move to the " + direction);
+        System.out.println("-------------------------------");
         currentLevelMap.setCurrentRoom(room);
+        onMoveRoom();
+    }
+    private void onMoveRoom(){
+        //Do this whenever room has been changed
     }
 
     /**
@@ -101,17 +96,22 @@ public class Game {
     }
     private void take(String object){
         if(currentLevelMap.getCurrentRoom().hasItem()){
-            Collection<Item> itemsInRoom = currentLevelMap.getCurrentRoom().getItems();
+            Collection<Item> itemsInRoom = currentLevelMap.getCurrentRoom().getItemInventory();
             Item itemToTake = CommandParser.parseItemCommand(object,itemsInRoom);
-            if(itemToTake != null){
-                currentLevelMap.getCurrentRoom().pickUpItem(playerData,itemToTake);
+            if(currentLevelMap.getCurrentRoom().transferItemTo(itemToTake,playerData)){
                 return;
             }
         }
         System.out.println("No item with name " + object + " found.");
     }
     private void dropItem(String item){
-        //TODO implement dropping stuff
+        Item itemToDrop = CommandParser.parseItemCommand(item,playerData.getItemInventory());
+        if(itemToDrop != null){
+            playerData.transferItemTo(itemToDrop,currentLevelMap.getCurrentRoom());
+        }
+        else{
+            System.out.println("You dont have an item called " + item);
+        }
     }
     private void attack(String weapon){
         //TODO implement attacking

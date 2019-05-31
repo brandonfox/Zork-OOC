@@ -1,12 +1,15 @@
-package Commands;
+package com.company.Commands;
 
-import Items.Item;
+import com.company.Items.Item;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Scanner;
 import java.util.Set;
 
 public abstract class CommandParser {
+
+    private static final Scanner scanner = new Scanner(System.in);
 
     public static CommandPair parseCommand(String command, CommandGroup commandGroup) throws IOException {
         Set<String> validCommands = commandGroup.getCommands();
@@ -45,5 +48,17 @@ public abstract class CommandParser {
             }
         }
         return null;
+    }
+    public static void getAndExecuteCommand(CommandGroup commandGroup){
+        String command = waitForInput();
+        try {
+            CommandPair cmdPair = CommandParser.parseCommand(command, commandGroup);
+            commandGroup.getCommand(cmdPair.getCommand()).doCommand(cmdPair.getParam());
+        }catch(IOException e){
+            System.out.println("Command not recognised.");
+        }
+    }
+    private static String waitForInput(){
+        return scanner.nextLine();
     }
 }
