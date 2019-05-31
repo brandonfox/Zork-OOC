@@ -1,7 +1,7 @@
-package Items;
+package com.company.Items;
 
 import com.company.PlayerData;
-import com.company.Room;
+import com.company.Map.Room;
 
 public abstract class ConsumableItem extends Item {
 
