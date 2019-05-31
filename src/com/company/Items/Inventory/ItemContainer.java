@@ -1,4 +1,6 @@
-package Items;
+package com.company.Items.Inventory;
+
+import com.company.Items.Item;
 
 import java.util.Collection;
 
@@ -6,8 +8,8 @@ public interface ItemContainer {
 
     default boolean collectItem(Item item){
         if(item != null){
-        getInventory().add(item);
-        return true;
+            getItemInventory().add(item);
+            return true;
         }
         else
             return false;
@@ -21,7 +23,7 @@ public interface ItemContainer {
     default boolean removeItem(Item item){
         if(item == null)
             return false;
-        Collection<Item> inven = getInventory();
+        Collection<Item> inven = getItemInventory();
         if(inven.contains(item)){
             inven.remove(item);
             return true;
@@ -32,6 +34,6 @@ public interface ItemContainer {
     default boolean transferItemTo(Item item, ItemContainer container){
         return removeItem(item) && container.collectItem(item);
     }
-    Collection<Item> getInventory();
+    Collection<Item> getItemInventory();
 
 }

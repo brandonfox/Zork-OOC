@@ -1,4 +1,6 @@
-package Items;
+package com.company.Items.Inventory;
+
+import com.company.Items.Item;
 
 public class ItemNotFoundException extends Exception {
 

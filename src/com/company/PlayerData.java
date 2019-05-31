@@ -1,10 +1,15 @@
 package com.company;
 
-import Items.Item;
-import Items.ItemContainer;
+import com.company.Items.EquippableItem;
+import com.company.Items.Inventory.EquipmentContainer;
+import com.company.Items.Inventory.EquipmentSlots;
+import com.company.Items.Inventory.ItemContainer;
+import com.company.Items.Item;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 public class PlayerData implements ItemContainer {
     private int health;
@@ -13,7 +18,7 @@ public class PlayerData implements ItemContainer {
     private Collection<Item> inventory;
 
     public PlayerData(){
-        inventory = new ArrayList<>();
+        inventory = new HashSet<>();
         maxHealth = 100;
         health = maxHealth;
     }
@@ -25,7 +30,8 @@ public class PlayerData implements ItemContainer {
     }
 
     @Override
-    public Collection<Item> getInventory() {
+    public Collection<Item> getItemInventory() {
         return inventory;
     }
+
 }
