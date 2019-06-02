@@ -17,13 +17,12 @@ public abstract class MapGenerator {
     public static LevelMap createNewMap(int noRooms){
         Room startingRoom;
         HashMap<Point,Room> roomPositions = new HashMap<>();
-        RoomFactory roomFactory = new RoomFactory();
         Point currentPoint = new Point(0,0);
-        roomPositions.put(currentPoint,roomFactory.createEmptyRoom(currentPoint));
+        roomPositions.put(currentPoint,RoomFactory.createEmptyRoom(currentPoint));
         startingRoom = roomPositions.get(currentPoint);
         for(int i = 1; i < noRooms; i++){
             currentPoint = getAdjacentFreeRoom(currentPoint,roomPositions.keySet(),true);
-            roomPositions.put(currentPoint, roomFactory.createRandomRoom(currentPoint));
+            roomPositions.put(currentPoint, RoomFactory.createRandomRoom(currentPoint));
         }
         return new LevelMap(startingRoom,roomPositions);
     }

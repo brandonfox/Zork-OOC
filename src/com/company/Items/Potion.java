@@ -1,6 +1,6 @@
 package com.company.Items;
 
-import com.company.PlayerData;
+import com.company.Entities.Creature;
 import com.company.Map.Room;
 
 public class Potion extends ConsumableItem {
@@ -19,7 +19,7 @@ public class Potion extends ConsumableItem {
     }
 
     @Override
-    public void use(PlayerData player, Room room) {
-        player.heal(heal);
+    public void use(Creature entity, Room room) {
+        entity.heal(heal);
     }
 }

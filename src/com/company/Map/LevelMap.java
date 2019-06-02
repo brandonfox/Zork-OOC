@@ -37,5 +37,6 @@ public class LevelMap {
     }
     public void setCurrentRoom(Room room){
         currentRoom = room;
+        room.setRoomAsExplored();
     }
 }

@@ -1,9 +1,13 @@
 package com.company;
 
+import com.company.Combat.Battle;
 import com.company.Commands.CommandGroup;
 import com.company.Commands.CommandParser;
+import com.company.Entities.PlayerEntity;
+import com.company.Entities.Skeleton;
+import com.company.Entities.Troll;
 import com.company.Items.Item;
-import com.company.Map.LevelMap;
+import com.company.Map.LevelData;
 import com.company.Map.MapGenerator;
 import com.company.Map.Room;
 
@@ -12,8 +16,8 @@ import java.util.Collection;
 
 public class Game {
 
-    private PlayerData playerData;
-    private LevelMap currentLevelMap;
+    private PlayerEntity playerData;
+    private LevelData currentLevelData;
     private CommandGroup gameCommands;
 
     public void startNewGame(){
@@ -23,10 +27,13 @@ public class Game {
         runGame();
     }
     private void createNewLevel(){
-        currentLevelMap = MapGenerator.createNewMap(15);
+        currentLevelData = new LevelData();
+        currentLevelData.setLevelMap(MapGenerator.createNewMap(15));
+        currentLevelData.addMonster(new Skeleton(1),5);
+        currentLevelData.addMonster(new Troll(1),1);
     }
     private void initialisePlayer(){
-        playerData = new PlayerData();
+        playerData = new PlayerEntity();
     }
     private void runGame(){
         //Print an introductory message before starting the game
@@ -39,7 +46,7 @@ public class Game {
         }
     }
     private void displayCurrentRoomData(){
-        currentLevelMap.displayCurrentRoomData();
+        currentLevelData.displayCurrentRoomData();
     }
     private void initialiseCommands(){
         gameCommands = new CommandGroup();
@@ -60,7 +67,7 @@ public class Game {
             System.out.println("Direction: " + direction + " not recognised");
             return;
         }
-        Room room = currentLevelMap.getRoomAt(movePoint);
+        Room room = currentLevelData.getRoomAt(movePoint);
         if(room == null){
             System.out.println("There is no room there");
             return;
@@ -68,11 +75,17 @@ public class Game {
         System.out.println("-------------------------------");
         System.out.println("You move to the " + direction);
         System.out.println("-------------------------------");
-        currentLevelMap.setCurrentRoom(room);
+        currentLevelData.moveToRoom(room);
         onMoveRoom();
     }
     private void onMoveRoom(){
         //Do this whenever room has been changed
+        //TODO check if room has a monster and start a battle
+        if(currentLevelData.getCurrentRoom().hasMonster()){
+            //Start battle
+            Battle battle = new Battle(playerData,currentLevelData.getCurrentRoom().getMonster());
+            battle.doBattle();
+        }
     }
 
     /**
@@ -81,7 +94,7 @@ public class Game {
      * @return A point in the direction 'direction' or null if direction could not be read
      */
     private Point getPointInDirection(String direction){
-        Point currentPoint = currentLevelMap.getCurrentRoom().getRoomPosition();
+        Point currentPoint = currentLevelData.getCurrentRoom().getRoomPosition();
         if(direction.contains("north"))
             return new Point(currentPoint.x,currentPoint.y + 1);
         else if(direction.contains("east"))
@@ -95,10 +108,10 @@ public class Game {
 
     }
     private void take(String object){
-        if(currentLevelMap.getCurrentRoom().hasItem()){
-            Collection<Item> itemsInRoom = currentLevelMap.getCurrentRoom().getItemInventory();
+        if(currentLevelData.getCurrentRoom().hasItem()){
+            Collection<Item> itemsInRoom = currentLevelData.getCurrentRoom().getItemInventory();
             Item itemToTake = CommandParser.parseItemCommand(object,itemsInRoom);
-            if(currentLevelMap.getCurrentRoom().transferItemTo(itemToTake,playerData)){
+            if(currentLevelData.getCurrentRoom().transferItemTo(itemToTake,playerData)){
                 return;
             }
         }
@@ -107,7 +120,7 @@ public class Game {
     private void dropItem(String item){
         Item itemToDrop = CommandParser.parseItemCommand(item,playerData.getItemInventory());
         if(itemToDrop != null){
-            playerData.transferItemTo(itemToDrop,currentLevelMap.getCurrentRoom());
+            playerData.transferItemTo(itemToDrop,currentLevelData.getCurrentRoom());
         }
         else{
             System.out.println("You dont have an item called " + item);

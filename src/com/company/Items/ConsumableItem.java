@@ -1,9 +1,9 @@
 package com.company.Items;
 
-import com.company.PlayerData;
+import com.company.Entities.Creature;
 import com.company.Map.Room;
 
 public abstract class ConsumableItem extends Item {
 
-    public abstract void use(PlayerData player, Room room);
+    public abstract void use(Creature player, Room room);
 }
