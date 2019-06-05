@@ -1,9 +1,9 @@
 package com.company.Entities;
 
-public class Troll extends Creature {
+public class Troll extends Monster {
 
     public Troll(int level){
-        super("Troll",level,130,30,8,45,2,4,2,4);
+        super("Troll",level,60,30,8,15,2,4,2,4,120);
     }
 
     @Override

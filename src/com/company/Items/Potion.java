@@ -22,4 +22,9 @@ public class Potion extends ConsumableItem {
     public void use(Creature entity, Room room) {
         entity.heal(heal);
     }
+
+    @Override
+    public String toString() {
+        return "Potion(" + heal + ")";
+    }
 }

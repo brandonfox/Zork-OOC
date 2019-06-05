@@ -1,11 +1,14 @@
 package com.company.Items;
 
+import com.company.CloneableObject;
+
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public abstract class Item {
+public abstract class Item implements CloneableObject {
 
-    private Set<String> acceptedStrings;
+    private Set<String> acceptedStrings = new HashSet<>();
     protected static Random random = new Random();
     private int itemlevel;
     /**
@@ -22,4 +25,13 @@ public abstract class Item {
         return acceptedStrings;
     }
 
+    @Override
+    public Object clone(){
+        try {
+            return super.clone();
+        }catch(CloneNotSupportedException e){
+            System.out.println("Error while cloning " + this.toString());
+            return null;
+        }
+    }
 }

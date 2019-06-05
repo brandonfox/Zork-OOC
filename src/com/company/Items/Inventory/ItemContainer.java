@@ -2,7 +2,7 @@ package com.company.Items.Inventory;
 
 import com.company.Items.Item;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface ItemContainer {
 
@@ -23,7 +23,7 @@ public interface ItemContainer {
     default boolean removeItem(Item item){
         if(item == null)
             return false;
-        Collection<Item> inven = getItemInventory();
+        List<Item> inven = getItemInventory();
         if(inven.contains(item)){
             inven.remove(item);
             return true;
@@ -34,6 +34,16 @@ public interface ItemContainer {
     default boolean transferItemTo(Item item, ItemContainer container){
         return removeItem(item) && container.collectItem(item);
     }
-    Collection<Item> getItemInventory();
+    List<Item> getItemInventory();
+
+    default void displayInventory(){
+        List<Item> inven = getItemInventory();
+        System.out.println("____________________________________");
+        System.out.println("Item Inventory: ");
+        for(int i = 0;i < inven.size(); i++){
+            System.out.println(i + ". " + inven.get(i).toString());
+        }
+        System.out.println("____________________________________");
+    }
 
 }

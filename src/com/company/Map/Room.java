@@ -1,19 +1,18 @@
 package com.company.Map;
 
-import com.company.Entities.Creature;
+import com.company.Entities.Monster;
 import com.company.Items.Inventory.ItemContainer;
 import com.company.Items.Item;
 
 import java.awt.*;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 public class Room implements ItemContainer {
 
     private Point roomPosition;
-    private final Collection<Item> roomItems = new HashSet<>();
+    private java.util.List<Item> roomItems = new ArrayList<>();
     private boolean explored = false;
-    private Creature roomCreature;
+    private Monster roomCreature;
 
 
     public Room(Point p){
@@ -28,9 +27,10 @@ public class Room implements ItemContainer {
     public boolean hasMonster(){return roomCreature != null;}
     public void setRoomAsExplored(){explored = true;}
     public boolean isExplored(){return explored;}
-    public Collection<Item> getItemInventory(){
+    public java.util.List<Item> getItemInventory(){
         return roomItems;
     }
-    public void setMonster(Creature c){roomCreature = c;}
-    public Creature getMonster(){return roomCreature;}
+    public void setMonster(Monster c){roomCreature = c;}
+    public Monster getMonster(){return roomCreature;}
+    public void removeMonster(){roomCreature = null;}
 }

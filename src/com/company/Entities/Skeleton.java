@@ -1,9 +1,9 @@
 package com.company.Entities;
 
-public class Skeleton extends Creature{
+public class Skeleton extends Monster{
 
     public Skeleton(int level){
-        super("Skeleton",level,60,7,2,60,1,2,3,1);
+        super("Skeleton",level,40,7,2,60,1,2,3,1,15);
     }
 
     @Override

@@ -4,11 +4,8 @@ import com.company.Combat.Battle;
 import com.company.Commands.CommandGroup;
 import com.company.Commands.CommandParser;
 import com.company.Entities.PlayerEntity;
-import com.company.Entities.Skeleton;
-import com.company.Entities.Troll;
 import com.company.Items.Item;
 import com.company.Map.LevelData;
-import com.company.Map.MapGenerator;
 import com.company.Map.Room;
 
 import java.awt.*;
@@ -27,10 +24,7 @@ public class Game {
         runGame();
     }
     private void createNewLevel(){
-        currentLevelData = new LevelData();
-        currentLevelData.setLevelMap(MapGenerator.createNewMap(15));
-        currentLevelData.addMonster(new Skeleton(1),5);
-        currentLevelData.addMonster(new Troll(1),1);
+        currentLevelData = LevelFactory.getLevel1();
     }
     private void initialisePlayer(){
         playerData = new PlayerEntity();
@@ -54,6 +48,7 @@ public class Game {
         gameCommands.addCommand("move",this::moveRoom);
         gameCommands.addCommand("take",this::take);
         gameCommands.addCommand("drop",this::dropItem);
+        gameCommands.addCommand("inventory",(param) -> displayInventory());
         gameCommands.addCommand("attack with",this::attack);
         gameCommands.addCommand("help",(param) -> help());
         gameCommands.addCommand("quit",(param) -> quit());
@@ -62,7 +57,7 @@ public class Game {
         //TODO implement info display
     }
     private void moveRoom(String direction){
-        Point movePoint = getPointInDirection(direction);
+        Point movePoint = currentLevelData.getPointInDirection(direction);
         if(movePoint == null){
             System.out.println("Direction: " + direction + " not recognised");
             return;
@@ -80,32 +75,26 @@ public class Game {
     }
     private void onMoveRoom(){
         //Do this whenever room has been changed
-        //TODO check if room has a monster and start a battle
         if(currentLevelData.getCurrentRoom().hasMonster()){
             //Start battle
             Battle battle = new Battle(playerData,currentLevelData.getCurrentRoom().getMonster());
-            battle.doBattle();
+            int battleStatus = battle.doBattle();
+            if(battleStatus == 1){
+                //Player has died
+                //TODO dead player
+                quit();
+            }
+            else if(battleStatus == 2){
+                //Monsters defeated
+                currentLevelData.getCurrentRoom().removeMonster();
+                //Do giving item stuff here
+                Item i = currentLevelData.getRandomItem(75);
+                if(i != null){
+                    System.out.println("You got a " + i.toString());
+                    playerData.collectItem(i);
+                }
+            }
         }
-    }
-
-    /**
-     * Get a point in the direction 'direction'
-     * @param direction The string to read
-     * @return A point in the direction 'direction' or null if direction could not be read
-     */
-    private Point getPointInDirection(String direction){
-        Point currentPoint = currentLevelData.getCurrentRoom().getRoomPosition();
-        if(direction.contains("north"))
-            return new Point(currentPoint.x,currentPoint.y + 1);
-        else if(direction.contains("east"))
-            return new Point(currentPoint.x + 1, currentPoint.y);
-        else if(direction.contains("south"))
-            return new Point(currentPoint.x,currentPoint.y - 1);
-        else if(direction.contains("west"))
-            return new Point(currentPoint.x-1,currentPoint.y);
-        else
-            return null;
-
     }
     private void take(String object){
         if(currentLevelData.getCurrentRoom().hasItem()){
@@ -132,6 +121,11 @@ public class Game {
     private void help(){
         //TODO implement help
     }
+
+    private void displayInventory(){
+        playerData.displayInventory();
+    }
+
     private void quit(){
         GameLauncher.exit();
     }

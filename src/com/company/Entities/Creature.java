@@ -1,8 +1,10 @@
 package com.company.Entities;
 
+import com.company.CloneableObject;
+
 import java.util.Random;
 
-public abstract class Creature {
+public abstract class Creature implements CloneableObject {
 
     private int currentHealth;
     private int maxHealth;
@@ -19,7 +21,7 @@ public abstract class Creature {
 
     protected int armour;
 
-    private static final Random random = new Random();
+    protected static final Random random = new Random();
 
     private int baseAccuracy;
     private int baseDamage;
@@ -84,4 +86,16 @@ public abstract class Creature {
     public String toString() {
         return name;
     }
+    public int getMaxHealth(){
+        return maxHealth;
+    }
+    public Object clone(){
+        try {
+            return super.clone();
+        }catch(CloneNotSupportedException e){
+            System.out.println("Error while cloning " + this.toString());
+            return null;
+        }
+    }
+
 }

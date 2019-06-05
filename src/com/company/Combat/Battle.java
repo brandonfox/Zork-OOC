@@ -3,6 +3,7 @@ package com.company.Combat;
 import com.company.Commands.CommandGroup;
 import com.company.Commands.CommandParser;
 import com.company.Entities.Creature;
+import com.company.Entities.Monster;
 import com.company.Entities.PlayerEntity;
 
 import java.util.ArrayList;
@@ -13,70 +14,81 @@ import java.util.Random;
 public class Battle {
 
     private PlayerEntity player;
-    private List<Creature> monsters;
+    private List<Monster> monsters;
 
     private CommandGroup battleCommands;
 
-    public Battle(PlayerEntity player, Creature... fightEntities){
+    public Battle(PlayerEntity player, Monster... fightEntities){
         monsters = new ArrayList<>();
         this.player = player;
         monsters.addAll(Arrays.asList(fightEntities));
         initialiseBattleCommands();
     }
 
-    public void doBattle(){
+    /**
+     * Start a battle
+     * @return 1 if the player lost, 2 if the monsters were defeated
+     */
+    public int doBattle(){
         printPreBattleMessage();
-        boolean hasEnded = false;
-        while(!hasEnded){
+        while(true){
             printBattleInfo();
             CommandParser.getAndExecuteCommand(battleCommands);
             monsters = getLivingMonsters();
             doMonsterStep();
-            hasEnded = !getBattleStatus();
+            int battleStatus = getBattleStatus();
+            if(battleStatus != 0){
+                return battleStatus;
+            }
         }
     }
 
     private void doMonsterStep(){
-        for (Creature c: monsters) {
+        for (Monster c: monsters) {
             doAttack(c,player);
         }
     }
 
     /**
      * Get the status of the battle
-     * @return true if the battle is currently ongoing, false if the battle has ended
+     * @return 0 if the battle is still ongoing, 1 if the player is dead, 2 if the monsters are defeated
      */
-    private boolean getBattleStatus(){
+    private int getBattleStatus(){
         if(player.getCurrentHealth() <= 0){
             doDeadPlayerStuff();
+            return 1;
         }
         else if(getLivingMonsters().size() == 0){
             winBattle();
+            return 2;
         }
-        else{
-            return true;
+        else {
+            return 0;
         }
-        return false;
     }
     private void winBattle(){
         displayWinMessage();
     }
+
     private void displayWinMessage(){
         System.out.println("Congrats you have won the battle");
+        System.out.println("----------------------------------------------------");
     }
     private void doDeadPlayerStuff(){
         System.out.println("Player has died");
     }
 
-    private List<Creature> getLivingMonsters(){
-        List<Creature> updatedEntities = new ArrayList<>(monsters);
-        for (Creature e: monsters) {
+    private List<Monster> getLivingMonsters(){
+        List<Monster> updatedEntities = new ArrayList<>(monsters);
+        for (Monster e: monsters) {
             if(e.getCurrentHealth() <= 0){
+                player.increaseExperience(e.getExperienceValue());
                 updatedEntities.remove(e);
             }
         }
         return updatedEntities;
     }
+
 
     private void attack(String attackMonster){
         if(monsters.size() == 1){
@@ -122,7 +134,14 @@ public class Battle {
         }
     }
     private void printBattleInfo(){
+        printCreatureHealth(player);
+        for (Creature c: monsters) {
+            printCreatureHealth(c);
+        }
         battleCommands.printCommandsInline();
+    }
+    private void printCreatureHealth(Creature c){
+        System.out.println(c + ": " + c.getCurrentHealth() + " / " + c.getMaxHealth());
     }
 
 }

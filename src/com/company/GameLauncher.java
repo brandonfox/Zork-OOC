@@ -1,11 +1,8 @@
 package com.company;
 
 import com.company.Commands.CommandGroup;
-import com.company.Commands.CommandPair;
 import com.company.Commands.CommandParser;
 
-import java.io.IOException;
-import java.util.*;
 
 /**
  * Handles the game menu and initialises a game
