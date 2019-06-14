@@ -1,29 +1,26 @@
 package com.company.Map;
 
-import com.company.CloneableObject;
 import com.company.Entities.Monster;
-import com.company.Entities.PlayerEntity;
 import com.company.Items.Inventory.ItemContainer;
 import com.company.Items.Item;
+import com.company.ProbabilityMap;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public class LevelData {
 
     private LevelMap levelMap;
-    private Map<CloneableObject,Integer> monsterMap;
-    private Map<CloneableObject,Integer> itemDropMap;
+    private ProbabilityMap<Monster> monsterMap;
+    private ProbabilityMap<Item> itemDropMap;
 
     private int monsterChance = 70;
 
     private static final Random random = new Random();
 
     public LevelData(){
-        monsterMap = new HashMap<>();
-        itemDropMap = new HashMap<>();
+        monsterMap = new ProbabilityMap<>();
+        itemDropMap = new ProbabilityMap<>();
     }
 
     public void setLevelMap(LevelMap map){
@@ -41,43 +38,13 @@ public class LevelData {
     }
 
     public void addMonster(Monster monster, int spawnWeight){
-        monsterMap.put(monster,spawnWeight);
+        monsterMap.setKey(monster,spawnWeight);
     }
 
     public void addItem(Item item, int spawnWeight){itemDropMap.put(item,spawnWeight);}
 
     public Item getRandomItem(){
-        return (Item)getRandomObject(itemDropMap);
-    }
-
-    /**
-     * Get a random item designated for this level
-     * @param percentage percentage chance of getting an item
-     * @return Item or null
-     */
-    public Item getRandomItem(int percentage){
-        if(random.nextInt(100) <= percentage){
-            return getRandomItem();
-        }
-        return null;
-    }
-
-    private Object getRandomObject(Map<CloneableObject,Integer> objectMap){
-        int totalWeights = getTotalWeights(objectMap);
-        int objectInt = random.nextInt(totalWeights);
-        for(CloneableObject o : objectMap.keySet()){
-            objectInt -= objectMap.get(o);
-            if(objectInt <= 0){
-                return o.clone();
-            }
-        }
-        return null;
-    }
-
-    private int getTotalWeights(Map<?,Integer> map){
-        int total = 0;
-        for(Integer i: map.values()){total += i;}
-        return total;
+        return itemDropMap.getRandomItem();
     }
 
     public void displayCurrentRoomData(){
@@ -91,7 +58,7 @@ public class LevelData {
     public void moveToRoom(Room room){
         if(!room.isExplored()){
             if(random.nextInt(100) <= monsterChance)
-                room.setMonster((Monster)getRandomObject(monsterMap));
+                room.setMonster(monsterMap.getRandomItem());
         }
         levelMap.setCurrentRoom(room);
 
