@@ -1,12 +1,11 @@
 package com.company.Items.Inventory;
 
 import com.company.Items.EquippableItem;
-import com.company.Items.Item;
 
 import java.util.Map;
 
 
-public interface EquipmentContainer {
+public interface Equipment {
 
 
     Map<EquipmentSlots, EquippableItem> getEquipmentInventory();

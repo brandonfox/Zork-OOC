@@ -27,18 +27,9 @@ public class LevelMap {
     }
     private void printRoomNeighbours(Room room){
         //TODO change this to use hashmap
-        //Print north
-        Room northRoom = getRoomAt(new Point(room.getRoomPosition().x,room.getRoomPosition().y+1));
-        printHasRoomInDirection(northRoom,"north");
-        //Print east
-        Room eastRoom = getRoomAt(new Point(room.getRoomPosition().x+1,room.getRoomPosition().y));
-        printHasRoomInDirection(eastRoom, "east");
-        //Print south
-        Room southRoom = getRoomAt(new Point(room.getRoomPosition().x,room.getRoomPosition().y-1));
-        printHasRoomInDirection(southRoom, "south");
-        //Print west
-        Room westRoom = getRoomAt(new Point(room.getRoomPosition().x-1,room.getRoomPosition().y));
-        printHasRoomInDirection(westRoom, "west");
+        for(String dir: moveDirections.keySet()){
+            printHasRoomInDirection(dir);
+        }
     }
     public Room getRoomAt(Point position){
         return roomMap.get(position);
@@ -50,7 +41,8 @@ public class LevelMap {
         currentRoom = room;
         room.setRoomAsExplored();
     }
-    private void printHasRoomInDirection(Room room, String direction){
+    private void printHasRoomInDirection(String direction){
+        Room room = getRoomAt(getPointInDirection(direction));
         if(room != null) {
             if (room.isExplored()) {
                 System.out.println("There is a room to the " + direction);

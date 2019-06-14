@@ -4,8 +4,11 @@ import com.company.Combat.Battle;
 import com.company.Commands.CommandGroup;
 import com.company.Commands.CommandParser;
 import com.company.Entities.PlayerEntity;
+import com.company.Items.ConsumableItem;
+import com.company.Items.EquippableItem;
 import com.company.Items.Item;
 import com.company.Map.LevelData;
+import com.company.Map.LevelFactory;
 import com.company.Map.Room;
 
 import java.awt.*;
@@ -49,12 +52,13 @@ public class Game {
         gameCommands.addCommand("take",this::take);
         gameCommands.addCommand("drop",this::dropItem);
         gameCommands.addCommand("inventory",(param) -> displayInventory());
-        gameCommands.addCommand("attack with",this::attack);
+        gameCommands.addCommand("use",this::useItem);
+        gameCommands.addCommand("equip",this::equip);
         gameCommands.addCommand("help",(param) -> help());
         gameCommands.addCommand("quit",(param) -> quit());
     }
-    private void displayInfo(String category){
-        //TODO implement info display
+    private void displayInfo(String arguments){
+        playerData.printData();
     }
     private void moveRoom(String direction){
         Point movePoint = currentLevelData.getPointInDirection(direction);
@@ -75,24 +79,19 @@ public class Game {
     }
     private void onMoveRoom(){
         //Do this whenever room has been changed
+        playerData.heal(5);
         if(currentLevelData.getCurrentRoom().hasMonster()){
             //Start battle
             Battle battle = new Battle(playerData,currentLevelData.getCurrentRoom().getMonster());
             int battleStatus = battle.doBattle();
             if(battleStatus == 1){
                 //Player has died
-                //TODO dead player
+                System.out.println("You are dead. Game over.");
                 quit();
             }
             else if(battleStatus == 2){
                 //Monsters defeated
-                currentLevelData.getCurrentRoom().removeMonster();
-                //Do giving item stuff here
-                Item i = currentLevelData.getRandomItem(75);
-                if(i != null){
-                    System.out.println("You got a " + i.toString());
-                    playerData.collectItem(i);
-                }
+                currentLevelData.defeatedMonster(playerData);
             }
         }
     }
@@ -115,15 +114,41 @@ public class Game {
             System.out.println("You dont have an item called " + item);
         }
     }
-    private void attack(String weapon){
-        //TODO implement attacking
+
+    private void equip(String item){
+        Item itemToEquip = CommandParser.parseItemCommand(item,playerData.getItemInventory());
+        if(itemToEquip != null){
+            if(itemToEquip.getClass().isInstance(EquippableItem.class)){
+                playerData.equipItem((EquippableItem)itemToEquip);
+            }
+            else{
+                System.out.println("You cant equip that.");
+            }
+        }
+        else{
+            System.out.println("You dont have an item called " + item);
+        }
     }
+
     private void help(){
-        //TODO implement help
+        gameCommands.printAllCommands();
     }
 
     private void displayInventory(){
         playerData.displayInventory();
+    }
+
+    private void useItem(String item){
+        Item itemToUse = CommandParser.parseItemCommand(item,playerData.getItemInventory());
+        try{
+            System.out.println("You use the " + itemToUse);
+            ConsumableItem cItem = (ConsumableItem)itemToUse;
+            cItem.use(playerData);
+            playerData.removeItem(cItem);
+        }
+        catch(Exception e){
+            System.out.println("You cant use the " + itemToUse);
+        }
     }
 
     private void quit(){

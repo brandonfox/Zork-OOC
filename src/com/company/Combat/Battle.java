@@ -141,7 +141,7 @@ public class Battle {
         battleCommands.printCommandsInline();
     }
     private void printCreatureHealth(Creature c){
-        System.out.println(c + ": " + c.getCurrentHealth() + " / " + c.getMaxHealth());
+        c.printHealth();
     }
 
 }

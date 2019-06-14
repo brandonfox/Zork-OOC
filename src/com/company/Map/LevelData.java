@@ -2,6 +2,8 @@ package com.company.Map;
 
 import com.company.CloneableObject;
 import com.company.Entities.Monster;
+import com.company.Entities.PlayerEntity;
+import com.company.Items.Inventory.ItemContainer;
 import com.company.Items.Item;
 
 import java.awt.*;
@@ -106,6 +108,16 @@ public class LevelData {
      */
     public Point getPointInDirection(String direction){
         return levelMap.getPointInDirection(direction);
+    }
+
+    public void defeatedMonster(ItemContainer playerInventory){
+        Monster curMonster = getCurrentRoom().getMonster();
+        Item itemReward = curMonster.getRandomDrop(false);
+        if(itemReward != null){
+            System.out.println(curMonster.toString() + " dropped a " + itemReward.toString());
+            playerInventory.collectItem(itemReward);
+        }
+        getCurrentRoom().removeMonster();
     }
 
 }

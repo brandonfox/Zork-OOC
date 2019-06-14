@@ -4,11 +4,11 @@ import java.util.*;
 
 public class CommandGroup {
 
-    private final Map<String,Command> menuCommands = new HashMap<>();
+    private final Map<String,Command> commands = new HashMap<>();
     private final List<String> commandOrder = new ArrayList<>();
 
     public void addCommand(String command,Command method){
-        menuCommands.put(command,method);
+        commands.put(command,method);
         commandOrder.add(command);
     }
     public void printCommands(){
@@ -34,12 +34,19 @@ public class CommandGroup {
         System.out.println(endString);
     }
     public Command getCommand(String s){
-        return menuCommands.get(s);
+        return commands.get(s);
     }
     public String getCommandString(int i){
         return commandOrder.get(i);
     }
     public Set<String> getCommands(){
-        return menuCommands.keySet();
+        return commands.keySet();
+    }
+    public void printAllCommands(){
+        System.out.println("Usable commands:");
+        for (String c:commands.keySet()) {
+            System.out.println("\t" + c);
+        }
+        System.out.println("______________________________");
     }
 }

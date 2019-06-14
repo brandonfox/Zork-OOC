@@ -1,10 +1,8 @@
-package com.company;
+package com.company.Map;
 
 import com.company.Entities.Skeleton;
 import com.company.Entities.Troll;
 import com.company.Items.Potion;
-import com.company.Map.LevelData;
-import com.company.Map.MapGenerator;
 
 public abstract class LevelFactory {
 

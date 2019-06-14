@@ -1,7 +1,6 @@
 package com.company.Items;
 
 import com.company.Entities.Creature;
-import com.company.Map.Room;
 
 public class Potion extends ConsumableItem {
 
@@ -13,14 +12,18 @@ public class Potion extends ConsumableItem {
 
     public Potion(int level){
         setAcceptedName("potion");
-        setItemLevel(level);
+        if(level <= 0) setItemLevel(1);
+        else
+            setItemLevel(level);
+
         int levelIncrease = getItemLevel() * levelHealModifier;
         heal = 100 + levelIncrease + random.nextInt(levelIncrease * 2) - levelIncrease;
     }
 
     @Override
-    public void use(Creature entity, Room room) {
+    public void use(Creature entity) {
         entity.heal(heal);
+        entity.printHealth();
     }
 
     @Override

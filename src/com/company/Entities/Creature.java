@@ -12,6 +12,7 @@ public abstract class Creature implements CloneableObject {
 
     private String name;
 
+    protected int level;
     //Influences raw damage
     protected int strength = 0;
     //Influences dodges and speed
@@ -37,6 +38,7 @@ public abstract class Creature implements CloneableObject {
         this.randomAttackDeviation = randomAttackDeviation;
         this.baseAccuracy = baseAccuracy;
         this.armour = armour;
+        this.level = level;
         for(int i = 0; i < level; i++){levelUp();}
         currentHealth = maxHealth;
     }
@@ -96,6 +98,9 @@ public abstract class Creature implements CloneableObject {
             System.out.println("Error while cloning " + this.toString());
             return null;
         }
+    }
+    public void printHealth(){
+        System.out.println(this.toString() + " health: " + currentHealth + "/" + maxHealth);
     }
 
 }

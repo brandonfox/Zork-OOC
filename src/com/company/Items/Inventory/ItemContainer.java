@@ -41,9 +41,8 @@ public interface ItemContainer {
         System.out.println("____________________________________");
         System.out.println("Item Inventory: ");
         for(int i = 0;i < inven.size(); i++){
-            System.out.println(i + ". " + inven.get(i).toString());
+            System.out.println(i+1 + ". " + inven.get(i).toString());
         }
         System.out.println("____________________________________");
     }
-
 }
