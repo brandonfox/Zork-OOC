@@ -2,8 +2,8 @@ package com.company.Combat;
 
 import com.company.Commands.CommandGroup;
 import com.company.Commands.CommandParser;
-import com.company.Entities.Creature;
-import com.company.Entities.Monster;
+import com.company.Entities.Abstract.Creature;
+import com.company.Entities.Abstract.Monster;
 import com.company.Entities.PlayerEntity;
 
 import java.util.ArrayList;
@@ -18,18 +18,18 @@ public class Battle {
 
     private CommandGroup battleCommands;
 
-    public Battle(PlayerEntity player, Monster... fightEntities){
+    public Battle(Monster... fightEntities){
         monsters = new ArrayList<>();
-        this.player = player;
         monsters.addAll(Arrays.asList(fightEntities));
-        initialiseBattleCommands();
     }
 
     /**
      * Start a battle
      * @return 1 if the player lost, 2 if the monsters were defeated
      */
-    public int doBattle(){
+    public int startBattle(PlayerEntity player){
+        this.player = player;
+        initialiseBattleCommands();
         printPreBattleMessage();
         while(true){
             printBattleInfo();
@@ -120,6 +120,8 @@ public class Battle {
     private void initialiseBattleCommands(){
         battleCommands = new CommandGroup();
         battleCommands.addCommand("attack",this::attack);
+        battleCommands.addCommand("use",player::useItem);
+        battleCommands.addCommand("inventory",(param) -> player.displayInventory());
     }
 
     private void printPreBattleMessage(){

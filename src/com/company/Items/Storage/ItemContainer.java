@@ -1,4 +1,4 @@
-package com.company.Items.Inventory;
+package com.company.Items.Storage;
 
 import com.company.Items.Item;
 
@@ -39,7 +39,7 @@ public interface ItemContainer {
     default void displayInventory(){
         List<Item> inven = getItemInventory();
         System.out.println("____________________________________");
-        System.out.println("Item Inventory: ");
+        System.out.println("Item Storage: ");
         for(int i = 0;i < inven.size(); i++){
             System.out.println(i+1 + ". " + inven.get(i).toString());
         }

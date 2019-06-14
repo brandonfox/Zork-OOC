@@ -20,14 +20,12 @@ public class Game {
     private LevelData currentLevelData;
     private CommandGroup gameCommands;
 
+    int level = 0;
     public void startNewGame(){
-        createNewLevel();
         initialisePlayer();
         initialiseCommands();
+        goToNextLevel();
         runGame();
-    }
-    private void createNewLevel(){
-        currentLevelData = LevelFactory.getLevel1();
     }
     private void initialisePlayer(){
         playerData = new PlayerEntity();
@@ -51,8 +49,8 @@ public class Game {
         gameCommands.addCommand("move",this::moveRoom);
         gameCommands.addCommand("take",this::take);
         gameCommands.addCommand("drop",this::dropItem);
-        gameCommands.addCommand("inventory",(param) -> displayInventory());
-        gameCommands.addCommand("use",this::useItem);
+        gameCommands.addCommand("inventory",(param) -> playerData.displayInventory());
+        gameCommands.addCommand("use",playerData::useItem);
         gameCommands.addCommand("equip",this::equip);
         gameCommands.addCommand("help",(param) -> help());
         gameCommands.addCommand("quit",(param) -> quit());
@@ -82,8 +80,8 @@ public class Game {
         playerData.heal(5);
         if(currentLevelData.getCurrentRoom().hasMonster()){
             //Start battle
-            Battle battle = new Battle(playerData,currentLevelData.getCurrentRoom().getMonster());
-            int battleStatus = battle.doBattle();
+            Battle battle = currentLevelData.getCurrentRoom().getRoomBattle();
+            int battleStatus = battle.startBattle(playerData);
             if(battleStatus == 1){
                 //Player has died
                 System.out.println("You are dead. Game over.");
@@ -92,6 +90,13 @@ public class Game {
             else if(battleStatus == 2){
                 //Monsters defeated
                 currentLevelData.defeatedMonster(playerData);
+            }
+            else if(battleStatus == 3){ //Floor boss defeated
+                //Win level
+                //Go to next level
+                System.out.println("You have killed the boss of this level.");
+                System.out.println("Moving to the next floor");
+                goToNextLevel();
             }
         }
     }
@@ -115,6 +120,7 @@ public class Game {
         }
     }
 
+
     private void equip(String item){
         Item itemToEquip = CommandParser.parseItemCommand(item,playerData.getItemInventory());
         if(itemToEquip != null){
@@ -134,24 +140,13 @@ public class Game {
         gameCommands.printAllCommands();
     }
 
-    private void displayInventory(){
-        playerData.displayInventory();
-    }
-
-    private void useItem(String item){
-        Item itemToUse = CommandParser.parseItemCommand(item,playerData.getItemInventory());
-        try{
-            System.out.println("You use the " + itemToUse);
-            ConsumableItem cItem = (ConsumableItem)itemToUse;
-            cItem.use(playerData);
-            playerData.removeItem(cItem);
-        }
-        catch(Exception e){
-            System.out.println("You cant use the " + itemToUse);
-        }
-    }
-
     private void quit(){
         GameLauncher.exit();
     }
+
+    private void goToNextLevel(){
+        level++;
+        currentLevelData = LevelFactory.getLevel(level);
+    }
+
 }

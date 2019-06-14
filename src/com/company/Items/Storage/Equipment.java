@@ -1,4 +1,4 @@
-package com.company.Items.Inventory;
+package com.company.Items.Storage;
 
 import com.company.Items.EquippableItem;
 

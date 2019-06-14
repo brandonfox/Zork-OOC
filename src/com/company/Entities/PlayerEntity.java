@@ -1,9 +1,12 @@
 package com.company.Entities;
 
+import com.company.Commands.CommandParser;
+import com.company.Entities.Abstract.Creature;
+import com.company.Items.ConsumableItem;
 import com.company.Items.EquippableItem;
-import com.company.Items.Inventory.Equipment;
-import com.company.Items.Inventory.EquipmentSlots;
-import com.company.Items.Inventory.ItemContainer;
+import com.company.Items.Storage.Equipment;
+import com.company.Items.Storage.EquipmentSlots;
+import com.company.Items.Storage.ItemContainer;
 import com.company.Items.Item;
 
 import java.util.ArrayList;
@@ -52,5 +55,17 @@ public class PlayerEntity extends Creature implements ItemContainer, Equipment {
     public void printData(){
         System.out.println("You are a level " + level + " player");
         printHealth();
+    }
+    public void useItem(String item){
+        Item itemToUse = CommandParser.parseItemCommand(item,getItemInventory());
+        try{
+            System.out.println("You use the " + itemToUse);
+            ConsumableItem cItem = (ConsumableItem)itemToUse;
+            cItem.use(this);
+            removeItem(cItem);
+        }
+        catch(Exception e){
+            System.out.println("You cant use the " + itemToUse);
+        }
     }
 }

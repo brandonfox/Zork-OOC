@@ -1,4 +1,4 @@
-package com.company.Entities;
+package com.company.Entities.Abstract;
 
 public abstract class MonsterFactory {
 

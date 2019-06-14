@@ -1,5 +1,7 @@
 package com.company.Entities;
 
+import com.company.Entities.Abstract.Monster;
+
 public class Troll extends Monster {
 
     public Troll(int level){

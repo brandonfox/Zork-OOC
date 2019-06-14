@@ -1,6 +1,8 @@
 package com.company.Entities;
 
-public class Skeleton extends Monster{
+import com.company.Entities.Abstract.Monster;
+
+public class Skeleton extends Monster {
 
     public Skeleton(int level){
         super("Skeleton",level,40,7,2,60,1,2,3,1,15);

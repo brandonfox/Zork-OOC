@@ -1,6 +1,6 @@
 package com.company.Map;
 
-import com.company.Entities.Creature;
+import com.company.Entities.Abstract.Creature;
 
 import java.util.HashMap;
 import java.util.Map;

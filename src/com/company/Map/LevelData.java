@@ -1,7 +1,7 @@
 package com.company.Map;
 
-import com.company.Entities.Monster;
-import com.company.Items.Inventory.ItemContainer;
+import com.company.Entities.Abstract.Monster;
+import com.company.Items.Storage.ItemContainer;
 import com.company.Items.Item;
 import com.company.ProbabilityMap;
 
@@ -25,10 +25,6 @@ public class LevelData {
 
     public void setLevelMap(LevelMap map){
         levelMap = map;
-        levelMap.addMoveDirection("north",new Point(0,1));
-        levelMap.addMoveDirection("south",new Point(0,-1));
-        levelMap.addMoveDirection("east",new Point(1,0));
-        levelMap.addMoveDirection("west",new Point(-1,0));
         map.getCurrentRoom().removeMonster();
         map.getCurrentRoom().setRoomAsExplored();
     }
@@ -39,6 +35,11 @@ public class LevelData {
 
     public void addMonster(Monster monster, int spawnWeight){
         monsterMap.setKey(monster,spawnWeight);
+    }
+
+    public void addBossRoom(Monster bossMonster){
+        Room newRoom = levelMap.addRandomRoom();
+        newRoom.makeBossRoom(bossMonster);
     }
 
     public void addItem(Item item, int spawnWeight){itemDropMap.put(item,spawnWeight);}
@@ -56,7 +57,7 @@ public class LevelData {
     }
 
     public void moveToRoom(Room room){
-        if(!room.isExplored()){
+        if(!room.isExplored() && !room.hasMonster()){
             if(random.nextInt(100) <= monsterChance)
                 room.setMonster(monsterMap.getRandomItem());
         }

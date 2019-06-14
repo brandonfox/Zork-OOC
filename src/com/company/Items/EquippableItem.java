@@ -1,7 +1,7 @@
 package com.company.Items;
 
 
-import com.company.Items.Inventory.EquipmentSlots;
+import com.company.Items.Storage.EquipmentSlots;
 
 public class EquippableItem extends Item {
 

@@ -1,6 +1,6 @@
 package com.company.Items;
 
-import com.company.Entities.Creature;
+import com.company.Entities.Abstract.Creature;
 
 public abstract class ConsumableItem extends Item {
 

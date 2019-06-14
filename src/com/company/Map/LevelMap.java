@@ -8,25 +8,35 @@ public class LevelMap {
 
     private Room currentRoom;
     private Map<Point,Room> roomMap;
-    private Map<String,Point> moveDirections;
+    private static Map<String,Point> moveDirections;
 
     public LevelMap(Room startingRoom, Map<Point,Room> map){
         currentRoom = startingRoom;
         roomMap = map;
-        moveDirections = new HashMap<>();
+
     }
 
-    public void addMoveDirection(String moveDir, Point moveData){
+    public static Map<String,Point> getValidMoveDirections(){
+        if(moveDirections == null){
+            moveDirections = new HashMap<>();
+            addMoveDirection("north",new Point(0,1));
+            addMoveDirection("south",new Point(0,-1));
+            addMoveDirection("east",new Point(1,0));
+            addMoveDirection("west",new Point(-1,0));
+        }
+        return moveDirections;
+    }
+
+    private static void addMoveDirection(String moveDir, Point moveData){
         moveDirections.put(moveDir,moveData);
     }
 
     public void displayCurrentRoomData(){
         System.out.println("You are in a room");
         System.out.println("There is nothing here");
-        printRoomNeighbours(currentRoom);
+        printRoomNeighbours();
     }
-    private void printRoomNeighbours(Room room){
-        //TODO change this to use hashmap
+    private void printRoomNeighbours(){
         for(String dir: moveDirections.keySet()){
             printHasRoomInDirection(dir);
         }
@@ -63,5 +73,15 @@ public class LevelMap {
             }
         }
         return null;
+    }
+
+    /**
+     * Create a random room adjacent to another room on the map
+     * @return the newly created room
+     */
+    public Room addRandomRoom(){
+        //Just add a new room next to the last room in the list
+        //If it is not the current room
+        return MapGenerator.addRandomRoom(roomMap);
     }
 }
