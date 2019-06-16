@@ -4,7 +4,6 @@ import com.company.Combat.Battle;
 import com.company.Commands.CommandGroup;
 import com.company.Commands.CommandParser;
 import com.company.Entities.PlayerEntity;
-import com.company.Items.ConsumableItem;
 import com.company.Items.EquippableItem;
 import com.company.Items.Item;
 import com.company.Map.LevelData;
@@ -20,7 +19,7 @@ public class Game {
     private LevelData currentLevelData;
     private CommandGroup gameCommands;
 
-    int level = 0;
+    private int level = 0;
     public void startNewGame(){
         initialisePlayer();
         initialiseCommands();
@@ -89,12 +88,13 @@ public class Game {
             }
             else if(battleStatus == 2){
                 //Monsters defeated
-                currentLevelData.defeatedMonster(playerData);
+                currentLevelData.defeatedMonster(playerData,false);
             }
             else if(battleStatus == 3){ //Floor boss defeated
                 //Win level
                 //Go to next level
                 System.out.println("You have killed the boss of this level.");
+                currentLevelData.defeatedMonster(playerData,true);
                 System.out.println("Moving to the next floor");
                 goToNextLevel();
             }
@@ -147,6 +147,12 @@ public class Game {
     private void goToNextLevel(){
         level++;
         currentLevelData = LevelFactory.getLevel(level);
+        if(currentLevelData == null){
+            //No more levels
+            //Win the game
+            System.out.println("Congrats you have won the game");
+            quit();
+        }
     }
 
 }

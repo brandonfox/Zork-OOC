@@ -68,4 +68,18 @@ public class PlayerEntity extends Creature implements ItemContainer, Equipment {
             System.out.println("You cant use the " + itemToUse);
         }
     }
+
+    @Override
+    public int getAttack() {
+        int attack = super.getAttack();
+        attack += getEquipmentAttack();
+        return attack;
+    }
+
+    @Override
+    public int getDefence() {
+        int def = super.getDefence();
+        def += getEquipmentArmour();
+        return def;
+    }
 }

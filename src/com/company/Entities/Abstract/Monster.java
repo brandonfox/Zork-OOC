@@ -14,7 +14,7 @@ public abstract class Monster extends Creature {
 
         //Add default item drops shared by all monsters
         //Potion will accept all types of potion
-        monsterItemDrops.setKey(new Potion(level),10);
+        monsterItemDrops.setKey(new Potion(level),4);
     }
 
     /**
@@ -30,6 +30,9 @@ public abstract class Monster extends Creature {
     //Method for monster specific viable drops
     protected void addExtraDrops(){
 
+    }
+    protected void addItemDrop(Item item,int dropWeight){
+        monsterItemDrops.setKey(item,dropWeight);
     }
 
     public Item getRandomDrop(boolean guaranteedDrop){

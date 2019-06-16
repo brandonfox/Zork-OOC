@@ -21,5 +21,19 @@ public interface Equipment {
             inven.remove(item.getEquipSlot());
         }
     }
+    default int getEquipmentAttack(){
+        int total = 0;
+        for (EquippableItem e:getEquipmentInventory().values()) {
+            total += e.getAttack();
+        }
+        return total;
+    }
+    default int getEquipmentArmour(){
+        int total = 0;
+        for(EquippableItem e: getEquipmentInventory().values()){
+            total += e.getArmour();
+        }
+        return total;
+    }
 
 }

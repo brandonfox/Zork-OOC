@@ -78,9 +78,9 @@ public class LevelData {
         return levelMap.getPointInDirection(direction);
     }
 
-    public void defeatedMonster(ItemContainer playerInventory){
+    public void defeatedMonster(ItemContainer playerInventory,boolean guaranteeDrop){
         Monster curMonster = getCurrentRoom().getMonster();
-        Item itemReward = curMonster.getRandomDrop(false);
+        Item itemReward = curMonster.getRandomDrop(guaranteeDrop);
         if(itemReward != null){
             System.out.println(curMonster.toString() + " dropped a " + itemReward.toString());
             playerInventory.collectItem(itemReward);
