@@ -19,6 +19,6 @@ public class Skeleton extends Monster {
 
     @Override
     protected void addExtraDrops() {
-        addItemDrop(new EquippableItem(EquipmentSlots.hands,"Sword",10,0),1);
+        addItemDrop(new EquippableItem(EquipmentSlots.Hands,"Sword",10,0),1);
     }
 }

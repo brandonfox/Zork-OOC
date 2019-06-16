@@ -35,5 +35,19 @@ public interface Equipment {
         }
         return total;
     }
+    default void printEquipment(){
+        System.out.println("Equipment:------------------------------");
+        for (EquipmentSlots e: EquipmentSlots.values()) {
+            System.out.print(e.toString() + ": ");
+            if(getEquipmentInventory().get(e) == null){
+                System.out.print("None");
+            }
+            else{
+                System.out.print(getEquipmentInventory().get(e).toString());
+            }
+            System.out.print("\n");
+        }
+        System.out.println("----------------------------------------");
+    }
 
 }

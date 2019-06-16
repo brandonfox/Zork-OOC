@@ -55,6 +55,7 @@ public class PlayerEntity extends Creature implements ItemContainer, Equipment {
     public void printData(){
         System.out.println("You are a level " + level + " player");
         printHealth();
+        printEquipment();
     }
     public void useItem(String item){
         Item itemToUse = CommandParser.parseItemCommand(item,getItemInventory());

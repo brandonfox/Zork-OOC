@@ -146,7 +146,7 @@ public class Game {
 
     private void goToNextLevel(){
         level++;
-        currentLevelData = LevelFactory.getLevel(level);
+        currentLevelData = LevelFactory.getNextLevel();
         if(currentLevelData == null){
             //No more levels
             //Win the game
